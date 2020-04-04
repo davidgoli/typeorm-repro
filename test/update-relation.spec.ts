@@ -50,6 +50,12 @@ it("allows updating the relation from one side of a many-to-many", async () => {
   const readUser2 = await userRepo.findOne(user.id, { relations: ["groups"] })
   expect(readUser2.groups).toEqual([group2, group3])
 
+  readUser2.groups = [group2, group3]
+  await userRepo.save(readUser2)
+
+  const readUser2b = await userRepo.findOne(user.id, { relations: ["groups"] })
+  expect(readUser2b.groups).toEqual([group2, group3])
+
   readUser2.groups = []
   await userRepo.save(readUser2)
 

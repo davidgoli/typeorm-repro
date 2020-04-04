@@ -1,14 +1,25 @@
-import {Entity, PrimaryGeneratedColumn, ManyToMany, Column} from "typeorm";
-import { User } from "./User"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  Column,
+  OneToMany,
+  JoinTable
+} from "typeorm";
+import { User } from "./User";
+import { GroupMember } from "./GroupMember";
 
-@Entity({ name: 'group' })
+@Entity({ name: "group" })
 export class Group {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ unique: true })
-    name: string;
+  @Column({ unique: true })
+  name: string;
 
-    @ManyToMany(() => User, (user) => user.groups)
-    users: User[]
+  @ManyToMany(() => User, user => user.groups)
+  users: User[];
+
+  @OneToMany(() => GroupMember, gm => gm.group)
+  group_memberships: GroupMember[];
 }

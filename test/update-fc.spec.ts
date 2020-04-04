@@ -102,15 +102,6 @@ describe("setGroupsForUser", () => {
         fc.set(fc.string()),
         fc.set(fc.string()),
         async (firstName, lastName, beforeGroupNames, afterGroupNames) => {
-          if (
-            _.isEmpty(firstName) &&
-            _.isEmpty(lastName) &&
-            _.some(beforeGroupNames, _.isEmpty) &&
-            _.some(afterGroupNames, _.isEmpty)
-          ) {
-            return;
-          }
-
           const beforeGroups = await Promise.all(
             beforeGroupNames.map(createGroup)
           );

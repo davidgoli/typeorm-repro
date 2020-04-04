@@ -1,25 +1,43 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany, JoinColumn} from "typeorm";
-import { Group } from "./Group"
-import { Auth } from "./Auth"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+  OneToMany
+} from "typeorm";
+import { Group } from "./Group";
+import { Auth } from "./Auth";
+import { GroupMember } from "./GroupMember";
 
-@Entity({ name: 'user' })
+@Entity({ name: "user" })
 export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  firstName: string;
 
-    @Column()
-    firstName: string;
+  @Column()
+  lastName: string;
 
-    @Column()
-    lastName: string;
+  @ManyToMany(() => Group, group => group.users)
+  @JoinTable({
+    name: "group_member",
+    joinColumn: {
+      name: "user",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "group",
+      referencedColumnName: "id"
+    }
+  })
+  groups: Group[];
 
-    @ManyToMany(() => Group, (group) => group.users)
-    @JoinTable({
-        name: 'group_member'
-    })
-    groups: Group[]
+  @OneToMany(() => Auth, auth => auth.user)
+  auth_methods: Auth[];
 
-    @OneToMany(() => Auth, (auth) => auth.user)
-    auth_methods: Auth[]
+  @OneToMany(() => GroupMember, gm => gm.user)
+  group_memberships: GroupMember[];
 }
